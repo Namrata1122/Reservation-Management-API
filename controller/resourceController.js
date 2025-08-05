@@ -1,3 +1,5 @@
+const Resources = require('../models/resource');
+
 const getAllResources =(req,res)=>{
     res.setHeader('Content-Type','text/plain');
     res.send("List of resources.");
