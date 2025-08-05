@@ -6,9 +6,11 @@ const connectDB = require('./db/connectMDB.js')
 
 const auth = require('./routes/authRoutes.js')
 const resources = require('./routes/resourceRoutes.js')
+app.use(express.json());
 
 app.use('/auth',auth);
 app.use('/resources',resources);
+
 
 
 app.get('/welcome',(req,res)=>{

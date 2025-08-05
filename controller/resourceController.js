@@ -5,9 +5,13 @@ const getAllResources =(req,res)=>{
     res.send("List of resources.");
 }
 
-const createResource =(req,res)=>{
-    res.setHeader('Content-Type','text/plain');
-    res.send("Resource Created");
+const createResource =async (req,res)=>{
+    try{
+        const resource = await Resources.create(req.body);
+        res.status(201).json({resource});
+    }catch(error){
+        console.log(error);
+    }
 }
 
 const getResource =(req,res)=>{
