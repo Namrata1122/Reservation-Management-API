@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrpt = require('bcrypt') // secure password hashing
+const bcrypt = require('bcrypt') // secure password hashing
 
 const userSchema = new mongoose.Schema({
     username:{
