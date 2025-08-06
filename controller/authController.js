@@ -53,7 +53,7 @@ const login = async (req, res)=>{
 
 const profile = async (req, res)=>{
     const profile = await Users.find({});
-    res.status(200).json({profile});
+    res.status(200).json({profile},req.user);
 }
 
 module.exports = {

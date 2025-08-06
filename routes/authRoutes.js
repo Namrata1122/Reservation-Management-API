@@ -7,8 +7,9 @@ const authorizeRoles = require('../middleware/authorizationMiddleware')
 
 
 router.route('/register').post(register);
-router.route('/login').post(login,authenticateToken,authorizeRoles);
+router.route('/login').post(login);
 router.route('/profile').get(profile,authenticateToken);
+
 
 
 module.exports = router;
