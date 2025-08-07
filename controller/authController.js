@@ -2,6 +2,7 @@ const Users = require('../models/user')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const asyncWrapper = require('../middleware/asyncWrapper')
+const {BadRequestError} = require('../error');
 
 // const generateToken = (id)=>{
 //     jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"1800s"})
@@ -10,7 +11,7 @@ const asyncWrapper = require('../middleware/asyncWrapper')
 const register = asyncWrapper(async (req, res)=>{
     const {username,email,password,role} = req.body;
 
-        const userExists = await Users.findOne({email});
+        const userExists = await Users.findOne({username});
         if(userExists){ 
             res.status(400).json({message: `Username ${username} already taken.`})
         }else{
@@ -30,6 +31,10 @@ const register = asyncWrapper(async (req, res)=>{
 const login = asyncWrapper(async (req, res)=>{
         const email = req.body.email;
         const password = req.body.password;
+
+        if(!email || !password){
+            throw new BadRequestError('Provide email and password to login.');
+        }
 
         const useremail = await Users.findOne({email:email});
 
