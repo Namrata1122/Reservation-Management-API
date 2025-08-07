@@ -8,14 +8,14 @@ const {
     updateResource,
     deleteResource
 } = require('../controller/resourceController');
-const authenticateToken = require('../middleware/authenticationMiddleware');
+const authenticationMiddleware = require('../middleware/authenticationMiddleware');
 const authorizeRoles = require('../middleware/authorizationMiddleware');
 
 router.route('/').get(getAllResources)
-.post(createResource,authenticateToken,authorizeRoles);
+.post(createResource);
 
 router.route('/:id').get(getResource)
-.put(updateResource,authenticateToken,authorizeRoles)
-.delete(deleteResource,authenticateToken,authorizeRoles);
+.put(updateResource)
+.delete(deleteResource);
 
 module.exports = router;

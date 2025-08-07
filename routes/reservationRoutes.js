@@ -7,16 +7,16 @@ const {
     allReservations,
     cancelReservation
 } = require('../controller/reservationController');
-const authenticateToken = require('../middleware/authenticationMiddleware');
+
 const authorizeRoles = require('../middleware/authorizationMiddleware');
 
 // Routes for users
-router.route('/my').get(allUserReservations,authenticateToken);
-router.route('/').post(createReservation,authenticateToken);
-router.route('/:id').delete(cancelMyReservation,authenticateToken);
+router.route('/my').get(allUserReservations);
+router.route('/').post(createReservation);
+router.route('/:id').delete(cancelMyReservation);
 
 //Routes for admin
-router.route('/').get(allReservations,authenticateToken,authorizeRoles);
-router.route('/:id').delete(cancelReservation,authenticateToken,authorizeRoles);
+router.route('/').get(authorizeRoles,allReservations);
+router.route('/:id').delete(authorizeRoles,cancelReservation);
 
 module.exports = router;

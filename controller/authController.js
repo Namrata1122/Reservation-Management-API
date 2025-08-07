@@ -1,14 +1,14 @@
 const Users = require('../models/user') 
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const asyncWrapper = require('../middleware/asyncWrapper')
 
 // const generateToken = (id)=>{
 //     jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"1800s"})
 // }
 
-const register = async (req, res)=>{
+const register = asyncWrapper(async (req, res)=>{
     const {username,email,password,role} = req.body;
-    try{
 
         const userExists = await Users.findOne({email});
         if(userExists){ 
@@ -21,18 +21,13 @@ const register = async (req, res)=>{
             role : req.body.role
         });
 
-        const token =jwt.sign({email},process.env.JWT_SECRET)
+        const token = jwt.sign({email},process.env.JWT_SECRET,{expiresIn:"30d"});
         const savedUser = await newUser.save();
 
-        res.status(200).json({token,savedUser});
-        } 
-    }catch(error){
-        res.status(400).json({message:error.message});
-    }
-}
+        res.status(200).json({token,savedUser});}
+})
 
-const login = async (req, res)=>{
-    try{
+const login = asyncWrapper(async (req, res)=>{
         const email = req.body.email;
         const password = req.body.password;
 
@@ -41,20 +36,17 @@ const login = async (req, res)=>{
         const isMatch = await bcrypt.compare(password, useremail.password);
 
         if(isMatch){
-            const token = jwt.sign({email},process.env.JWT_SECRET,{expiresIn:"1800s"});
+            const token = jwt.sign({email},process.env.JWT_SECRET,{expiresIn:"30d"});
             res.status(200).json({message : "User Logged in Successfully.",token});
         }else{
             res.send("Invalid password details!");
         }
-    }catch(error){
-        res.send(400).send("Invalid password details");
-    }
-}
+})
 
-const profile = async (req, res)=>{
-    const profile = await Users.find({});
-    res.status(200).json({profile},req.user);
-}
+const profile = asyncWrapper(async (req, res)=>{
+    const profile = await Users.findOne(req.user);
+    res.status(200).json({profile});
+})
 
 module.exports = {
     register,

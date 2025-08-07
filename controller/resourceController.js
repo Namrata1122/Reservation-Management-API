@@ -26,7 +26,7 @@ const updateResource =asyncWrapper(async(req,res,next)=>{
     const {id:resourceID}=req.params;
     const resource = await Resources.findOneAndUpdate({_id:resourceID},req.body,{
         new:true,
-        runVAlidators:true
+        runValidators:true
     })
     if(!resource){
         return next(createCustomError(`No resource with resource id : ${resourceID}`,404))

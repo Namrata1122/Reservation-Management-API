@@ -5,8 +5,8 @@ const {createCustomError} = require('../error/customError')
 
 //user route handlers
 const allUserReservations = asyncWrapper (async (req,res)=>{
-    // const reservation = await Reservation.find({user:req.user._id}).populate('resource');
-    const reservation = await Reservation.find({});
+
+    const reservation = await Reservation.find(req.user);
     res.status(200).json({reservation});
 })
 
@@ -20,7 +20,7 @@ const cancelMyReservation = asyncWrapper(async(req,res)=>{
 
     const reservation = await Reservation.findOneAndDelete({reservationID})
     if(!reservation){
-        return next(createCustomError(`No reservation with id : ${reservationID}`,404))
+        return createCustomError(`No reservation with id : ${reservationID}`,404)
     }
     res.status(200).json({message:`This reservation is cancelled`,reservation});
 })
@@ -36,7 +36,7 @@ const cancelReservation = asyncWrapper(async(req,res)=>{
 
     const reservation = await Reservation.findOneAndDelete({reservationID})
     if(!reservation){
-        return next(createCustomError(`No reservation with id : ${reservationID}`,404))
+        return createCustomError(`No reservation with id : ${reservationID}`,404)
     }
     res.status(200).json({message:`This reservation is cancelled`,reservation});
 })
