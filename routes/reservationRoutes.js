@@ -8,15 +8,17 @@ const {
     cancelReservation
 } = require('../controller/reservationController');
 
+const authenticationMiddleware = require('../middleware/authenticationMiddleware')
 const authorizeRoles = require('../middleware/authorizationMiddleware');
 
+
 // Routes for users
-router.route('/my').get(allUserReservations);
-router.route('/').post(createReservation);
-router.route('/:id').delete(cancelMyReservation);
+router.route('/my').get(authenticationMiddleware,allUserReservations);
+router.route('/').post(authenticationMiddleware,createReservation);
+router.route('/:id').delete(authenticationMiddleware,cancelMyReservation);
 
 //Routes for admin
-router.route('/').get(authorizeRoles,allReservations);
-router.route('/:id').delete(authorizeRoles,cancelReservation);
+router.route('/').get(authenticationMiddleware,authorizeRoles('admin'),allReservations);
+router.route('/:id').delete(authenticationMiddleware,authorizeRoles('admin'),cancelReservation);
 
 module.exports = router;

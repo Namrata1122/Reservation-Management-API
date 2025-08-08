@@ -1,5 +1,4 @@
 const Reservation = require('../models/reservation');
-const Users = require('../models/user')
 const asyncWrapper = require('../middleware/asyncWrapper');
 const {createCustomError} = require('../error/customError')
 
@@ -27,7 +26,7 @@ const cancelMyReservation = asyncWrapper(async(req,res)=>{
 
 //admin reservation route handlers
 const allReservations = asyncWrapper(async(req,res)=>{
-    const reservation = await Reservation.find({});
+    const reservation = await Reservation.find().populate('user resource');
     res.status(200).json({reservation});
 })
 

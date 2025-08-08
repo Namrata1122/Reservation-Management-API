@@ -12,8 +12,8 @@ const autheticationMiddleware = asyncWrapper(async (req,res,next)=>{
        const token = authHeader.split(' ')[1];
        try{
            const decoded = jwt.verify(token,process.env.JWT_SECRET)
-           const {id,email} = decoded;
-           req.user = {id,email}
+           const {id,email,role} = decoded;
+           req.user = {id,email,role}
            next();
        }catch(error){
            throw new UnauthenticatedError('Not authorized to access this route')

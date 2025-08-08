@@ -1,17 +1,15 @@
-const authorizeRoles = (...allowedRoles) => {
+const authorizeRoles = (role) => {
     return (req,res,next)=>{
         if(!req.user || !req.user.role){
             return res.status(403).json({message:'Access Denied: User role not found'})
         }
 
-        const rolesArray = [...allowedRoles];
-        const result = rolesArray.includes(req.user.role);
-
-        if(result){
-            next();
-        }else{
-            res.status(403).json({message:'Access Denied : User not authoized.'})
+        if(req.user.role !==role){
+            return res.status(403).json({message:'Access Denied : User not authoized.'})
         }
+        
+        next();
+        
     }
 }
 

@@ -4,10 +4,6 @@ const jwt = require("jsonwebtoken");
 const asyncWrapper = require('../middleware/asyncWrapper')
 const {BadRequestError} = require('../error');
 
-// const generateToken = (id)=>{
-//     jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"1800s"})
-// }
-
 const register = asyncWrapper(async (req, res)=>{
     const {username,email,password,role} = req.body;
 
@@ -22,7 +18,7 @@ const register = asyncWrapper(async (req, res)=>{
             role : req.body.role
         });
 
-        const token = jwt.sign({email},process.env.JWT_SECRET,{expiresIn:"30d"});
+        const token = jwt.sign({id:newUser._id,email:newUser.email,role:newUser.role},process.env.JWT_SECRET,{expiresIn:"30d"});
         const savedUser = await newUser.save();
 
         res.status(200).json({token,savedUser});}
@@ -36,12 +32,14 @@ const login = asyncWrapper(async (req, res)=>{
             throw new BadRequestError('Provide email and password to login.');
         }
 
+        const user = await Users.findOne({email:email});
+
         const useremail = await Users.findOne({email:email});
 
         const isMatch = await bcrypt.compare(password, useremail.password);
 
         if(isMatch){
-            const token = jwt.sign({email},process.env.JWT_SECRET,{expiresIn:"30d"});
+            const token = jwt.sign({id:user._id,email:user.email,role:user.role},process.env.JWT_SECRET,{expiresIn:"30d"});
             res.status(200).json({message : "User Logged in Successfully.",token});
         }else{
             res.send("Invalid password details!");
