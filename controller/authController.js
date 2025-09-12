@@ -7,9 +7,12 @@ const {BadRequestError} = require('../error');
 const register = asyncWrapper(async (req, res)=>{
     const {username,email,password,role} = req.body;
 
-        const userExists = await Users.findOne({username});
-        if(userExists){ 
+        const usernameExists = await Users.findOne({username});
+        const emailExists = await Users.findOne({email});
+        if(usernameExists){ 
             res.status(400).json({message: `Username ${username} already taken.`})
+        }else if(emailExists){ 
+            res.status(400).json({message: `Email ${email} already Registered.`})
         }else{
             const newUser = new Users({
             firstname:req.body.firstname,
