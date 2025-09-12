@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require("cors");
 const app = express();
 require('dotenv').config();
 
@@ -7,6 +8,12 @@ const connectDB = require('./db/connectMDB.js')
 const auth = require('./routes/authRoutes.js')
 const resources = require('./routes/resourceRoutes.js')
 const reservations = require('./routes/reservationRoutes.js')
+
+app.use(cors({
+    origin:"http://localhost:4200",
+    methods:"GET,POST,PUT,DELETE",
+    credentials:true
+}))
 
 app.use(express.json());
 

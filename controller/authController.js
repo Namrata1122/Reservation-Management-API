@@ -12,6 +12,9 @@ const register = asyncWrapper(async (req, res)=>{
             res.status(400).json({message: `Username ${username} already taken.`})
         }else{
             const newUser = new Users({
+            firstname:req.body.firstname,
+            lastname:req.body.lastname,
+            dob:req.body.dob,
             username : req.body.username,
             email : req.body.email,
             password : req.body.password,

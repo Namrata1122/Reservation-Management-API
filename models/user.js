@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt') // secure password hashing
 
 const userSchema = new mongoose.Schema({
-    username:{
+    firstname:{
         type:String,
-        required:[true,"Must provide username."],
+        required:[true,"Must provide firstname."],
         trim: true,
-        maxlength: [20,"username cannot be more than 20 characters"]
+    },
+    lastname:{
+        type:String,
+        required:[true,"Must provide lastname."],
+        trim: true,
     },
     email:{
         type:String,
@@ -16,10 +20,24 @@ const userSchema = new mongoose.Schema({
         trim:true,
         match:[/^\S+@\S+\.\S+$/,'Please Provide valid email.']
     },
+    dob:{
+        type:Date,
+        required:true
+    },
+    gender :{
+        type:String,
+        default:'Female',
+        enum:['Male','Female','prefer not to say']
+    },
+    username:{
+        type:String,
+        required:[true,"Must provide username."],
+        trim: true,
+        maxlength: [20,"username cannot be more than 20 characters"]
+    },
     password:{
         type:String,
         required:true,
-
     },
     role :{
         type:String,
