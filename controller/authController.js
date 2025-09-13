@@ -31,21 +31,27 @@ const register = asyncWrapper(async (req, res)=>{
 })
 
 const login = asyncWrapper(async (req, res)=>{
+        const username = req.body.username;
         const email = req.body.email;
         const password = req.body.password;
 
-        if(!email || !password){
+        if(!email && !password){
             throw new BadRequestError('Provide email and password to login.');
+        }else if(!username && !password){
+            throw new BadRequestError('Provide username and password to login.');
+        }
+        let user = null;
+
+        if(email){
+            user = await Users.findOne({email:email});
+        }else if(username){
+            user = await Users.findOne({username:username});
         }
 
-        const user = await Users.findOne({email:email});
-
-        const useremail = await Users.findOne({email:email});
-
-        const isMatch = await bcrypt.compare(password, useremail.password);
+        const isMatch = await (bcrypt.compare(password, user.password));
 
         if(isMatch){
-            const token = jwt.sign({id:user._id,email:user.email,role:user.role},process.env.JWT_SECRET,{expiresIn:"30d"});
+            const token = jwt.sign({id:user._id,username:user.username,email:user.email,role:user.role},process.env.JWT_SECRET,{expiresIn:"30d"});
             res.status(200).json({message : "User Logged in Successfully.",token});
         }else{
             res.send("Invalid password details!");
