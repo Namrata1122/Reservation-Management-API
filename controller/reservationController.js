@@ -5,7 +5,7 @@ const {createCustomError} = require('../error/customError')
 //user route handlers
 const allUserReservations = asyncWrapper (async (req,res)=>{
 
-    const reservation = await Reservation.find(req.user);
+    const reservation = await Reservation.find({user: req.user.id}).populate('resource');
     res.status(200).json({reservation});
 })
 

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const resourceSchema = new mongoose.Schema({
+    img:
+    {
+        data: Buffer,
+        contentType: String
+    },
     name:{
         type:String,
         required: true,
@@ -8,7 +13,8 @@ const resourceSchema = new mongoose.Schema({
     },
     description :String,
     location:String,
-    capacity: Number
+    capacity: Number,
+    price:Number
 },{timestamps:true});
 
 module.exports = mongoose.model('Resources',resourceSchema);

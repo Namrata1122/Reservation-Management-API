@@ -6,6 +6,7 @@ const autheticationMiddleware = asyncWrapper(async (req,res,next)=>{
    const authHeader = req.headers.authorization;
    
        if(!authHeader || !authHeader.startsWith('Bearer ')){
+           console.log(req.headers);
            throw new UnauthenticatedError('No token provided')
        }
    

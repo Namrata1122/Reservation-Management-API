@@ -11,6 +11,7 @@ const reservations = require('./routes/reservationRoutes.js')
 
 app.use(cors({
     origin:"http://localhost:4200",
+    allowedHeaders:['Content-Type','Authorization'],
     methods:"GET,POST,PUT,DELETE",
     credentials:true
 }))
