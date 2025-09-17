@@ -10,6 +10,8 @@ const allUserReservations = asyncWrapper (async (req,res)=>{
 })
 
 const createReservation = asyncWrapper(async(req,res)=>{
+    const {userId,ResourceId, startTime,EndTime} = req.body;
+
     const reservation = await Reservation.create(req.body);
     res.status(200).json({reservation});
 })
