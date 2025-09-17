@@ -1,6 +1,6 @@
 const Reservation = require('../models/reservation');
 const asyncWrapper = require('../middleware/asyncWrapper');
-const {createCustomError} = require('../error/customError')
+const CustomAPIError = require('../error/customError')
 
 //user route handlers
 const allUserReservations = asyncWrapper (async (req,res)=>{
@@ -17,11 +17,11 @@ const createReservation = asyncWrapper(async(req,res)=>{
 })
 
 const cancelMyReservation = asyncWrapper(async(req,res)=>{
-    const {id:reservationID} = req.params;
+    const {_id:reservationID} = req.params;
 
     const reservation = await Reservation.findOneAndDelete({reservationID})
     if(!reservation){
-        return createCustomError(`No reservation with id : ${reservationID}`,404)
+        throw new CustomAPIError(`No reservation with id : ${reservationID}`,404)
     }
     res.status(200).json({message:`This reservation is cancelled`,reservation});
 })
@@ -37,7 +37,7 @@ const cancelReservation = asyncWrapper(async(req,res)=>{
 
     const reservation = await Reservation.findOneAndDelete({reservationID})
     if(!reservation){
-        return createCustomError(`No reservation with id : ${reservationID}`,404)
+        throw new CustomAPIError(`No reservation with id : ${reservationID}`,404)
     }
     res.status(200).json({message:`This reservation is cancelled`,reservation});
 })
